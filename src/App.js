@@ -1,16 +1,17 @@
 import './App.css';
 import React, { Component } from 'react';
 import Navbar from './components/Navbar';
-import Home from './components/Home';
+import Home from './components/startPage/Home';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
-    <React.Fragment>
-      <Navbar/>
-      <main className='container'>
-        <Home/>
-      </main>
-    </React.Fragment>
+    <div className="App">
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<Home/>} />
+      </Routes>
+    </div>
   );
 }
 

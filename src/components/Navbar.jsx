@@ -1,53 +1,200 @@
+import { AppBar, Avatar, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
+import { Box } from "@mui/system";
 import React, { Component } from "react";
+import { useNavigate } from "react-router-dom";
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
 import Logo from "./../logo.svg";
 
-class Navbar extends Component {
-    state = {
-        LoggedIn: true,
+const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(3),
+        width: 'auto',
+    },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('md')]: {
+            width: '20ch',
+        },
+    },
+}));
+
+function Navbar() {
+    const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [auth, setAuth] = React.useState(true);
+    const navigate = useNavigate();
+
+    const handleAuth = (event) => {
+        setAuth(event.target.checked);
     };
 
-    render() {
-        return (
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="/#"><img src={Logo} alt="" width="30" height="24" class="d-inline-block align-text-top" />Kwetter</a>
-                    <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <form class="d-flex ms-auto">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            {this.GetAuthStatus()}
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        );
-    }
+    const handleOpenNavMenu = (event) => {
+        setAnchorElNav(event.currentTarget);
+    };
 
-    GetAuthStatus() {
-        if (this.state.LoggedIn) return (
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="/#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Name
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="/#">Profile</a></li>
-                    <li><a class="dropdown-item" href="/#">Logout</a></li>
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
 
-                </ul>
-            </li>);
-        else {
-            return (
-                <li class="nav-item">
-                    <a class="nav-link" href="/#">Sign in</a>
-                </li>
-            );
-        }
-    }
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
+
+    return (
+        <AppBar position="static">
+            <Container maxWidth="xl">
+                <Toolbar disableGutters>
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        component="div"
+                        sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+                    >
+                        LOGO
+                    </Typography>
+
+                    <Box sx={{ flexGrow: 0.2, display: { xs: 'flex', md: 'none' } }}>
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            onClick={handleOpenNavMenu}
+                            color="inherit"
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorElNav}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                            }}
+                            open={Boolean(anchorElNav)}
+                            onClose={handleCloseNavMenu}
+                            sx={{
+                                display: { xs: 'block', md: 'none' },
+                            }}
+                        >
+                            <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
+                            <MenuItem onClick={() => navigate('/test')}>Test</MenuItem>
+                        </Menu>
+                    </Box>
+
+
+                    <Box sx={{ flexGrow: 0.5, display: { xs: 'none', md: 'flex' } }}>
+                        <Button
+                            onClick={() => navigate('/')}
+                            sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                            Home
+                        </Button>
+                        <Button
+                            onClick={() => navigate('/test')}
+                            sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                            Test
+                        </Button>
+                    </Box>
+
+
+                    <Search>
+                        <SearchIconWrapper>
+                            <SearchIcon />
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                            placeholder="Search…"
+                            inputProps={{ 'aria-label': 'search' }}
+                        />
+                    </Search>
+                    <Box sx={{ flexGrow: 1 }} />
+
+                    {auth ? <div>
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="Open settings">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+
+                                <MenuItem onClick={() => navigate('/profile')}>Profile</MenuItem>
+                                <MenuItem onClick={() => navigate('/authenticate')}>Logout</MenuItem>
+
+                            </Menu>
+                        </Box>
+                    </div> :
+                        <div>
+                            <Box sx={{ flexGrow: 0.5, display: { xs: 'none', md: 'flex' } }}>
+                                <Button
+                                    onClick={() => navigate('/authenticate')}
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                >
+                                    Login
+                                </Button>
+                            </Box>
+                        </div>}
+
+                </Toolbar>
+            </Container>
+        </AppBar>
+
+    );
 }
 
 export default Navbar;
