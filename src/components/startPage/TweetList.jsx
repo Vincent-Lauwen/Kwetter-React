@@ -1,21 +1,27 @@
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import TweetRow from "./TweetRow";
 import moment from 'moment';
+import TweetService from "../../services/TweetService";
+import { useQuery, useQueryClient } from "react-query";
 
 
 
 
 function TweetList() {
+    const { data: Tweets, refetch } = useQuery('get', async () => {
+        return await TweetService.getTimeLineTweets();
+    });
 
-    function getTimeline() {
-        console.log("heres timeline")
-    }
+
+    const getTimeline = () => {
+        refetch();
+    };
+
     function getMentions() {
-        console.log("heres timeline")
+        console.log("heres mentions")
     }
-
 
     return (
         <React.Fragment>
@@ -33,12 +39,10 @@ function TweetList() {
             >
                 @Mentions
             </Button>
-            <Box
-                sx={{
-                    border: 1,
-                    borderColor: 'primary.main'
-                }}
-            >
+            <Box sx={{ border: 1, borderColor: 'primary.main' }}>
+                {Tweets?.map((row) => (
+                    <TweetRow key={row} message={row.content} timestamp={row.publishDate} displayName="Vincent" />
+                ))}
                 <TweetRow
                     message="Testter"
                     timestamp={moment().toDate().toString()}
