@@ -1,6 +1,6 @@
 version: '3'
 services:
-  claimmoduleapp:
+  kwetterapp:
     image: ghcr.io/vincent-lauwen/kwetter-react:main
     build: .
     ports:
