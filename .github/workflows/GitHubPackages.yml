@@ -1,0 +1,26 @@
+# This is a basic workflow to help you get started with Actions
+name: Github packages
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    
+jobs:
+  build-container:
+    name: Build Docker container image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+      - name: Publish to Github packages
+        uses: docker/build-push-action@v2
+        with:
+          username: ${{ github.actor }}
+          password:  ${{ secrets.GHCR_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}
+          tags: latest, ${{ github.run_number }}
