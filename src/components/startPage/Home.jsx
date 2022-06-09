@@ -7,6 +7,8 @@ import CreateTweet from './CreateTweet';
 import TweetList from './TweetList';
 import AccountInfo from './AccountInfo';
 import TrendList from './TrendList';
+import UserService from "../../services/UserService";
+import { useQuery, useQueryClient } from "react-query";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -20,6 +22,9 @@ const Item = styled(Paper)(({ theme }) => ({
 
 function Home() {
 
+    const { data: user, refetch } = useQuery('get', async () => {
+        return await UserService.getUserTest();
+    });
 
     return (
         <React.Fragment>
