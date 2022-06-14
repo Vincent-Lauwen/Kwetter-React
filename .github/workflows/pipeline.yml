@@ -115,6 +115,7 @@ jobs:
         manifests: |
           manifests/deployment.yml
           manifests/service.yml
+          manifests/hpa.yml
         images: |
           kwettercr.azurecr.io/kwetterk8s:${{ github.sha }}
         imagepullsecrets: |
